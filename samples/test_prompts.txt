@@ -1,0 +1,39 @@
+
+## Full demo scenario (image + SF location + hospital heading)
+See samples/DEMO_SCENARIO.md — use with demo_wounded_hand.jpg + demo_sf_powell_street.jpg
+
+I fell on the sidewalk and cut my palm — there's a lot of blood and it hasn't stopped. I'm near Powell Street in San Francisco and GPS is unreliable.
+
+## Demo pair (negation — use these first)
+There's a lot of blood on his leg and it hasn't stopped.
+The bleeding has stopped now, we got a bandage on it.
+
+## CRITICAL
+The bleeding hasn't stopped, it's still pouring out
+It has not stopped bleeding at all
+Blood is spurting out of his leg in time with his heartbeat
+The bleeding stopped but then started again, it is still going
+Bleeding has not really stopped, just slowed a little
+He is not breathing and there is a small cut that stopped bleeding
+There's a third degree burn covering his forearm
+
+## SERIOUS
+The bleeding has stopped now after I applied pressure
+He is bleeding but it stopped already, looks fine
+The bleeding hasn't continued, it stopped right after we packed it
+I'm not sure, but the bleeding has stopped
+It was bleeding badly but not anymore, all clear now
+I think he has an open fracture in his arm
+
+## MODERATE
+The wound has some redness and swelling around it, might be infection
+
+## MINOR
+Just a small cut on my finger from the knife
+
+## UNKNOWN
+My foot feels weird today
+
+## Stub LLM keywords (StubAiService canned replies)
+Tell me about severe bleeding and pressure
+What should I do for a burn on the arm
