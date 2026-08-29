@@ -1,0 +1,5 @@
+{
+ "prompt": "You are a first-aid triage classifier used offline in the field.\n\nClassify the severity of the report below as exactly one of:\nCRITICAL, SERIOUS, MODERATE, MINOR, UNKNOWN\n\nCRITICAL means an immediate threat to life requiring action within seconds.\nSERIOUS means it needs stabilisation and likely evacuation.\nMODERATE means it needs cleaning and monitoring.\nMINOR means basic first aid is sufficient.\nUNKNOWN means there is not enough detail to judge.\n\nReply with ONLY that single word, nothing else.\n\nReport: \"He is not breathing and there is a small cut that stopped bleeding.\"\n",
+ "raw": "CRITICAL",
+ "severity": "CRITICAL"
+}

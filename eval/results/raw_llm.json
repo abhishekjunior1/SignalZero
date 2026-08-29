@@ -1,0 +1,122 @@
+[
+ {
+  "id": "u1",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "u2",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "u3",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "u4",
+  "severity": "SERIOUS",
+  "rule": "LLM"
+ },
+ {
+  "id": "u5",
+  "severity": "MINOR",
+  "rule": "LLM"
+ },
+ {
+  "id": "u6",
+  "severity": "SERIOUS",
+  "rule": "LLM"
+ },
+ {
+  "id": "n1",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "n2",
+  "severity": "UNKNOWN",
+  "rule": "LLM"
+ },
+ {
+  "id": "n3",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "n4",
+  "severity": "UNKNOWN",
+  "rule": "LLM"
+ },
+ {
+  "id": "n5",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "n6",
+  "severity": "SERIOUS",
+  "rule": "LLM"
+ },
+ {
+  "id": "n7",
+  "severity": "SERIOUS",
+  "rule": "LLM"
+ },
+ {
+  "id": "n8",
+  "severity": "SERIOUS",
+  "rule": "LLM"
+ },
+ {
+  "id": "p1",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "p2",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "p3",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "p4",
+  "severity": "MINOR",
+  "rule": "LLM"
+ },
+ {
+  "id": "x1",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "x2",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "x3",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "x4",
+  "severity": "CRITICAL",
+  "rule": "LLM"
+ },
+ {
+  "id": "x5",
+  "severity": "UNKNOWN",
+  "rule": "LLM"
+ },
+ {
+  "id": "x6",
+  "severity": "SERIOUS",
+  "rule": "LLM"
+ }
+]

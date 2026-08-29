@@ -1,0 +1,122 @@
+[
+ {
+  "id": "u1",
+  "severity": "CRITICAL",
+  "rule": "NOT_BREATHING"
+ },
+ {
+  "id": "u2",
+  "severity": "CRITICAL",
+  "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED"
+ },
+ {
+  "id": "u3",
+  "severity": "CRITICAL",
+  "rule": "SEVERE_BURN"
+ },
+ {
+  "id": "u4",
+  "severity": "SERIOUS",
+  "rule": "SERIOUS_OTHER"
+ },
+ {
+  "id": "u5",
+  "severity": "MINOR",
+  "rule": "MINOR_OTHER"
+ },
+ {
+  "id": "u6",
+  "severity": "MODERATE",
+  "rule": "MODERATE_OTHER"
+ },
+ {
+  "id": "n1",
+  "severity": "CRITICAL",
+  "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED"
+ },
+ {
+  "id": "n2",
+  "severity": "SERIOUS",
+  "rule": "BLEEDING_CONTROLLED"
+ },
+ {
+  "id": "n3",
+  "severity": "CRITICAL",
+  "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED"
+ },
+ {
+  "id": "n4",
+  "severity": "SERIOUS",
+  "rule": "BLEEDING_CONTROLLED"
+ },
+ {
+  "id": "n5",
+  "severity": "CRITICAL",
+  "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED"
+ },
+ {
+  "id": "n6",
+  "severity": "SERIOUS",
+  "rule": "BLEEDING_STATUS_UNKNOWN"
+ },
+ {
+  "id": "n7",
+  "severity": "CRITICAL",
+  "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED"
+ },
+ {
+  "id": "n8",
+  "severity": "SERIOUS",
+  "rule": "BLEEDING_CONTROLLED"
+ },
+ {
+  "id": "p1",
+  "severity": "CRITICAL",
+  "rule": "NOT_BREATHING"
+ },
+ {
+  "id": "p2",
+  "severity": "CRITICAL",
+  "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED"
+ },
+ {
+  "id": "p3",
+  "severity": "MINOR",
+  "rule": "MINOR_OTHER"
+ },
+ {
+  "id": "p4",
+  "severity": "MINOR",
+  "rule": "MINOR_OTHER"
+ },
+ {
+  "id": "x1",
+  "severity": "CRITICAL",
+  "rule": "LLM_FALLBACK(NO_MATCH)"
+ },
+ {
+  "id": "x2",
+  "severity": "CRITICAL",
+  "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED"
+ },
+ {
+  "id": "x3",
+  "severity": "CRITICAL",
+  "rule": "LLM_FALLBACK(NO_MATCH)"
+ },
+ {
+  "id": "x4",
+  "severity": "CRITICAL",
+  "rule": "LLM_FALLBACK(NO_MATCH)"
+ },
+ {
+  "id": "x5",
+  "severity": "UNKNOWN",
+  "rule": "LLM_FALLBACK(NO_MATCH)"
+ },
+ {
+  "id": "x6",
+  "severity": "SERIOUS",
+  "rule": "LLM_FALLBACK(NO_MATCH)"
+ }
+]
