@@ -40,9 +40,9 @@ build() {
   chmod +x "$REPO/android/gradlew" "$REPO/gradlew"
   # Shared multiplatform module: unit tests for the domain logic.
   (cd "$REPO" && ./gradlew :shared:testDebugUnitTest)
-  # The app itself.
-  (cd "$REPO/android" && ./gradlew assembleDebug \
-      -Dorg.gradle.java.home="$JAVA_HOME" "${GRADLE_OVERRIDES[@]}")
+  # The app builds from the repo root so it can depend on :shared. The QNN
+  # flags come from the root gradle.properties, so no -P overrides are needed.
+  (cd "$REPO" && ./gradlew :app:assembleDebug)
 }
 
 evaluate() {

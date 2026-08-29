@@ -6,7 +6,8 @@ import android.graphics.BitmapFactory
 import android.net.Uri
 import java.io.InputStream
 import java.security.MessageDigest
-import java.time.Instant
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 
 /** End-to-end night-sky navigation: detect stars → plate solve → true-north heading. */
 class StarNavigationPipeline(
@@ -23,7 +24,7 @@ class StarNavigationPipeline(
         contentHashHex: String,
         devicePitchDeg: Double,
         deviceAzimuthDeg: Double,
-        utc: Instant = Instant.now()
+        utc: Instant = Clock.System.now()
     ): StarNavigationResult {
         val detection = when (detector) {
             is CvStarDetector -> detector.detect(bitmap)

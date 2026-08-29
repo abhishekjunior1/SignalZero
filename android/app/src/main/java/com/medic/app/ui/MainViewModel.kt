@@ -428,8 +428,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
             }
 
             val solve = result.solve
-            if (solve.success && solve.trueNorthHeadingDeg != null) {
-                applyCelestialHeading(solve.trueNorthHeadingDeg, PositionSource.STAR_FIX)
+            val trueNorth = solve.trueNorthHeadingDeg
+            if (solve.success && trueNorth != null) {
+                applyCelestialHeading(trueNorth, PositionSource.STAR_FIX)
                 _uiState.value = _uiState.value.copy(
                     starNav = StarNavUiState(
                         processing = false,
@@ -653,8 +654,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 return@launch
             }
             val solve = result.solve
-            if (solve.success && solve.trueNorthHeadingDeg != null) {
-                applyCelestialHeading(solve.trueNorthHeadingDeg, PositionSource.STAR_FIX)
+            val trueNorth = solve.trueNorthHeadingDeg
+            if (solve.success && trueNorth != null) {
+                applyCelestialHeading(trueNorth, PositionSource.STAR_FIX)
                 _uiState.value = _uiState.value.copy(
                     starNav = StarNavUiState(
                         processing = false,
@@ -664,7 +666,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         latUncertainty = solve.latUncertaintyDeg,
                         solverKind = solve.solverKind
                     ),
-                    demoBanner = "STAR_FIX ${solve.trueNorthHeadingDeg.roundToInt()}° · ${result.detection.stars.size} stars"
+                    demoBanner = "STAR_FIX ${trueNorth.roundToInt()}° · ${result.detection.stars.size} stars"
                 )
             } else {
                 applyCelestialHeading(47.0, PositionSource.STAR_FIX)

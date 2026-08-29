@@ -56,6 +56,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":shared"))
     if (useLocalAar) {
         implementation(files("libs/executorch.aar"))
     } else {

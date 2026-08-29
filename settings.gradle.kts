@@ -28,4 +28,8 @@ include(":shared")
 // The existing Android app is left untouched under android/ while modules
 // migrate one at a time. :androidApp will consume :shared and replace it —
 // added here once it exists.
-// include(":androidApp")
+// The Android app builds from THIS root so it can depend on :shared.
+// android/settings.gradle.kts is left intact for the original Windows
+// workflow, but the two roots must not be used at the same time.
+include(":app")
+project(":app").projectDir = file("android/app")
