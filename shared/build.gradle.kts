@@ -5,6 +5,11 @@ plugins {
 }
 
 kotlin {
+    // JVM target exists so the evaluation harness can run the SHIPPED Kotlin
+    // headlessly. Scoring a Python re-implementation would measure a copy that
+    // silently drifts from the code that actually ships.
+    jvm()
+
     androidTarget {
         compilations.all {
             compileTaskProvider.configure {
@@ -50,4 +55,18 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+}
+
+/**
+ * Runs the triage eval against the shipped Kotlin.
+ *   ./gradlew :shared:evalCli --args="eval/cases/triage.json safetytree"
+ */
+tasks.register<JavaExec>("evalCli") {
+    group = "verification"
+    description = "Run the triage evaluation CLI over a case file"
+    val main = kotlin.targets.getByName("jvm").compilations.getByName("main")
+    classpath = files(main.output.allOutputs, main.runtimeDependencyFiles)
+    mainClass.set("com.medic.app.eval.EvalCliKt")
+    // JavaExec defaults to the module dir; case paths are repo-relative.
+    workingDir = rootDir
 }

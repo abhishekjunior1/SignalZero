@@ -101,13 +101,31 @@ object BleedingClassifier {
     )
     private val stoppedCues = listOf("stopped", "controlled", "under control", "stable now", "slowed")
     private val resolvedQualifiers = listOf("now", "finally", "already", "successfully")
-    private val arterialCues = listOf("spurting", "spurts", "pulsing", "pulses", "bright red", "gushing")
+    // Markers of arterial or otherwise uncontrolled haemorrhage. "pumping",
+    // "pouring" and a growing pool were absent and are ordinary lay phrasing:
+    // an evaluation case describing blood "pumping out of her calf" was being
+    // read as routine venous bleeding.
+    private val arterialCues = listOf(
+        "spurting", "spurts", "squirting", "pulsing", "pulses", "bright red",
+        "gushing", "pumping", "pouring", "pool of blood", "pooling",
+        "soaked through", "won't stop", "wont stop", "keeps getting bigger",
+        "getting bigger", "spreading"
+    )
+
+    /**
+     * What the text says about the bleeding, kept separate from how bad it is.
+     * The caller needs both: a casualty whose status was never stated must not
+     * be told their bleeding is controlled.
+     */
+    enum class BleedState { UNCONTROLLED, CONTROLLED, STATUS_NOT_STATED }
+
+    data class Assessment(val severity: Severity, val state: BleedState)
 
     /**
      * Returns null if the text doesn't appear to be about bleeding at all,
      * so callers can fall through to other rules.
      */
-    fun classify(textRaw: String): Severity? {
+    fun classify(textRaw: String): Assessment? {
         val text = textRaw.lowercase()
         val mentionsBleeding = activeBleedPhrases.any { text.contains(it) }
         if (!mentionsBleeding) return null
@@ -126,7 +144,8 @@ object BleedingClassifier {
         val clauses = text.split(Regex("\\b(?:but|then|however|although)\\b|[,.;]"))
         if (clauses.size > 1) {
             for (clause in clauses.drop(1)) {
-                if (resumeCues.any { clause.contains(it) }) return Severity.CRITICAL
+                if (resumeCues.any { clause.contains(it) })
+                    return Assessment(Severity.CRITICAL, BleedState.UNCONTROLLED)
             }
         }
 
@@ -157,19 +176,24 @@ object BleedingClassifier {
             // Bleeding explicitly NOT stopped -> still active -> CRITICAL
             // regardless of arterial vs venous, since user already flagged
             // it as ongoing and unresolved.
-            anyStoppedCueNegated -> Severity.CRITICAL
+            anyStoppedCueNegated -> Assessment(Severity.CRITICAL, BleedState.UNCONTROLLED)
 
             // Bleeding explicitly stopped/controlled -> no longer the most
             // urgent active threat. Still SERIOUS (shock risk, recently
             // life-threatening), not downgraded all the way to MINOR.
-            anyStoppedCueAffirmed -> Severity.SERIOUS
+            anyStoppedCueAffirmed -> Assessment(Severity.SERIOUS, BleedState.CONTROLLED)
 
             // No "stopped" cue at all -- bleeding mentioned with no
             // resolution status. Arterial markers push this to CRITICAL;
             // otherwise default to SERIOUS and let the LLM/user supply more
             // detail. We do NOT default ambiguous active bleeding to MINOR.
-            isArterial -> Severity.CRITICAL
-            else -> Severity.SERIOUS
+            isArterial -> Assessment(Severity.CRITICAL, BleedState.UNCONTROLLED)
+
+            // Bleeding mentioned, nothing said about whether it is controlled.
+            // SERIOUS by default -- but STATUS_NOT_STATED, never CONTROLLED.
+            // The distinction drives the directive, and claiming bleeding has
+            // stopped when nobody said so is the dangerous direction to err.
+            else -> Assessment(Severity.SERIOUS, BleedState.STATUS_NOT_STATED)
         }
     }
 }
@@ -209,20 +233,25 @@ object SafetyTree {
         }
 
         // Priority 2: bleeding (negation-aware)
-        val bleedSeverity = BleedingClassifier.classify(text)
-        if (bleedSeverity == Severity.CRITICAL) {
-            return TriageResult(
-                Severity.CRITICAL, "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED",
-                "Apply firm direct pressure or a tourniquet now. Do not wait for the bleeding to look worse before acting.",
-                input
-            )
-        }
-        if (bleedSeverity == Severity.SERIOUS) {
-            return TriageResult(
-                Severity.SERIOUS, "BLEEDING_CONTROLLED",
-                "Bleeding is controlled. Watch for shock, keep the casualty warm, and monitor the dressing/tourniquet.",
-                input
-            )
+        val bleed = BleedingClassifier.classify(text)
+        if (bleed != null) {
+            when (bleed.state) {
+                BleedingClassifier.BleedState.UNCONTROLLED -> return TriageResult(
+                    Severity.CRITICAL, "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED",
+                    "Apply firm direct pressure or a tourniquet now. Do not wait for the bleeding to look worse before acting.",
+                    input
+                )
+                BleedingClassifier.BleedState.CONTROLLED -> return TriageResult(
+                    Severity.SERIOUS, "BLEEDING_CONTROLLED",
+                    "Bleeding is controlled. Watch for shock, keep the casualty warm, and monitor the dressing/tourniquet.",
+                    input
+                )
+                BleedingClassifier.BleedState.STATUS_NOT_STATED -> return TriageResult(
+                    Severity.SERIOUS, "BLEEDING_STATUS_UNKNOWN",
+                    "Apply firm direct pressure and watch whether the bleeding slows. Treat it as active until you can see that it has stopped.",
+                    input
+                )
+            }
         }
 
         // Priority 3: severe burns

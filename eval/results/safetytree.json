@@ -1,0 +1,299 @@
+{
+ "system": "safetytree",
+ "accuracy": 0.75,
+ "correct": 18,
+ "total": 24,
+ "critical_miss_rate": 0.091,
+ "critical_missed": [
+  "x1"
+ ],
+ "over_triage": 0,
+ "by_tier": {
+  "unambiguous": {
+   "n": 6,
+   "ok": 6,
+   "accuracy": 1.0
+  },
+  "negation": {
+   "n": 8,
+   "ok": 8,
+   "accuracy": 1.0
+  },
+  "priority": {
+   "n": 4,
+   "ok": 3,
+   "accuracy": 0.75
+  },
+  "paraphrase": {
+   "n": 6,
+   "ok": 1,
+   "accuracy": 0.167
+  }
+ },
+ "rows": [
+  {
+   "id": "u1",
+   "tier": "unambiguous",
+   "expected": "CRITICAL",
+   "actual": "CRITICAL",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "NOT_BREATHING",
+   "text": "He is not breathing and I cannot find a pulse."
+  },
+  {
+   "id": "u2",
+   "tier": "unambiguous",
+   "expected": "CRITICAL",
+   "actual": "CRITICAL",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED",
+   "text": "Blood is spurting from his thigh in time with his heartbeat."
+  },
+  {
+   "id": "u3",
+   "tier": "unambiguous",
+   "expected": "CRITICAL",
+   "actual": "CRITICAL",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "SEVERE_BURN",
+   "text": "She has a third degree burn across most of her back."
+  },
+  {
+   "id": "u4",
+   "tier": "unambiguous",
+   "expected": "SERIOUS",
+   "actual": "SERIOUS",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "SERIOUS_OTHER",
+   "text": "His arm has an open fracture, the bone has broken the skin."
+  },
+  {
+   "id": "u5",
+   "tier": "unambiguous",
+   "expected": "MINOR",
+   "actual": "MINOR",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "MINOR_OTHER",
+   "text": "Just a small cut on my thumb from a knife."
+  },
+  {
+   "id": "u6",
+   "tier": "unambiguous",
+   "expected": "MODERATE",
+   "actual": "MODERATE",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "MODERATE_OTHER",
+   "text": "The wound has swelling and a red streak running up from it."
+  },
+  {
+   "id": "n1",
+   "tier": "negation",
+   "expected": "CRITICAL",
+   "actual": "CRITICAL",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED",
+   "text": "The bleeding hasn't stopped, it is still pouring out."
+  },
+  {
+   "id": "n2",
+   "tier": "negation",
+   "expected": "SERIOUS",
+   "actual": "SERIOUS",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "BLEEDING_CONTROLLED",
+   "text": "The bleeding has stopped now after I applied pressure."
+  },
+  {
+   "id": "n3",
+   "tier": "negation",
+   "expected": "CRITICAL",
+   "actual": "CRITICAL",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED",
+   "text": "It has not stopped bleeding at all."
+  },
+  {
+   "id": "n4",
+   "tier": "negation",
+   "expected": "SERIOUS",
+   "actual": "SERIOUS",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "BLEEDING_CONTROLLED",
+   "text": "I'm not sure, but the bleeding has stopped."
+  },
+  {
+   "id": "n5",
+   "tier": "negation",
+   "expected": "CRITICAL",
+   "actual": "CRITICAL",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED",
+   "text": "The bleeding stopped but then started again and is still going."
+  },
+  {
+   "id": "n6",
+   "tier": "negation",
+   "expected": "SERIOUS",
+   "actual": "SERIOUS",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "BLEEDING_STATUS_UNKNOWN",
+   "text": "It was bleeding badly but not anymore, all clear now."
+  },
+  {
+   "id": "n7",
+   "tier": "negation",
+   "expected": "CRITICAL",
+   "actual": "CRITICAL",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED",
+   "text": "Bleeding has not really stopped, it just slowed a little."
+  },
+  {
+   "id": "n8",
+   "tier": "negation",
+   "expected": "SERIOUS",
+   "actual": "SERIOUS",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "BLEEDING_CONTROLLED",
+   "text": "The bleeding hasn't continued, it stopped right after we packed it."
+  },
+  {
+   "id": "p1",
+   "tier": "priority",
+   "expected": "CRITICAL",
+   "actual": "CRITICAL",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "NOT_BREATHING",
+   "text": "He is not breathing and there is a small cut that stopped bleeding."
+  },
+  {
+   "id": "p2",
+   "tier": "priority",
+   "expected": "CRITICAL",
+   "actual": "CRITICAL",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED",
+   "text": "She twisted her ankle and blood is pumping out of her calf."
+  },
+  {
+   "id": "p3",
+   "tier": "priority",
+   "expected": "SERIOUS",
+   "actual": "MINOR",
+   "correct": false,
+   "under": true,
+   "over": false,
+   "rule": "MINOR_OTHER",
+   "text": "He has a scrape on his knee and has been confused since hitting his head."
+  },
+  {
+   "id": "p4",
+   "tier": "priority",
+   "expected": "MINOR",
+   "actual": "MINOR",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "MINOR_OTHER",
+   "text": "There is a bruise on his shin and a splinter in his palm."
+  },
+  {
+   "id": "x1",
+   "tier": "paraphrase",
+   "expected": "CRITICAL",
+   "actual": "UNKNOWN",
+   "correct": false,
+   "under": true,
+   "over": false,
+   "rule": "NO_MATCH",
+   "text": "His lips have gone blue and his chest is not moving at all."
+  },
+  {
+   "id": "x2",
+   "tier": "paraphrase",
+   "expected": "CRITICAL",
+   "actual": "CRITICAL",
+   "correct": true,
+   "under": false,
+   "over": false,
+   "rule": "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED",
+   "text": "There is a pool of blood under her and it keeps getting bigger."
+  },
+  {
+   "id": "x3",
+   "tier": "paraphrase",
+   "expected": "SERIOUS",
+   "actual": "UNKNOWN",
+   "correct": false,
+   "under": true,
+   "over": false,
+   "rule": "NO_MATCH",
+   "text": "His skin is cold and clammy, he's grey and his heart is racing."
+  },
+  {
+   "id": "x4",
+   "tier": "paraphrase",
+   "expected": "SERIOUS",
+   "actual": "UNKNOWN",
+   "correct": false,
+   "under": true,
+   "over": false,
+   "rule": "NO_MATCH",
+   "text": "She cannot feel her legs since she fell off the ladder."
+  },
+  {
+   "id": "x5",
+   "tier": "paraphrase",
+   "expected": "MINOR",
+   "actual": "UNKNOWN",
+   "correct": false,
+   "under": true,
+   "over": false,
+   "rule": "NO_MATCH",
+   "text": "The cut is clean, the edges sit together and nothing is coming out."
+  },
+  {
+   "id": "x6",
+   "tier": "paraphrase",
+   "expected": "SERIOUS",
+   "actual": "UNKNOWN",
+   "correct": false,
+   "under": true,
+   "over": false,
+   "rule": "NO_MATCH",
+   "text": "He has been in the water for hours, is shaking hard and making no sense."
+  }
+ ]
+}

@@ -1,0 +1,29 @@
+[
+{"id":"u1","tier":"unambiguous","text":"He is not breathing and I cannot find a pulse.","expected":"CRITICAL","rationale":"MARCH: respiration absent. Highest priority regardless of other findings."},
+{"id":"u2","tier":"unambiguous","text":"Blood is spurting from his thigh in time with his heartbeat.","expected":"CRITICAL","rationale":"MARCH: massive haemorrhage, arterial. Pulsatile flow is the arterial marker."},
+{"id":"u3","tier":"unambiguous","text":"She has a third degree burn across most of her back.","expected":"CRITICAL","rationale":"Full-thickness burn over a large body surface area."},
+{"id":"u4","tier":"unambiguous","text":"His arm has an open fracture, the bone has broken the skin.","expected":"SERIOUS","rationale":"Open fracture: stabilisation and evacuation, not immediately life-threatening."},
+{"id":"u5","tier":"unambiguous","text":"Just a small cut on my thumb from a knife.","expected":"MINOR","rationale":"Superficial laceration, basic first aid sufficient."},
+{"id":"u6","tier":"unambiguous","text":"The wound has swelling and a red streak running up from it.","expected":"MODERATE","rationale":"Lymphangitis, signs of infection. Needs monitoring, not urgent intervention."},
+
+{"id":"n1","tier":"negation","text":"The bleeding hasn't stopped, it is still pouring out.","expected":"CRITICAL","rationale":"Haemorrhage explicitly ongoing. The word 'stopped' appears but is negated."},
+{"id":"n2","tier":"negation","text":"The bleeding has stopped now after I applied pressure.","expected":"SERIOUS","rationale":"Haemorrhage controlled. Downgraded from critical, still shock risk."},
+{"id":"n3","tier":"negation","text":"It has not stopped bleeding at all.","expected":"CRITICAL","rationale":"Full-form negation of the same cue."},
+{"id":"n4","tier":"negation","text":"I'm not sure, but the bleeding has stopped.","expected":"SERIOUS","rationale":"The negation attaches to 'sure', not to 'stopped'. Contrast word resets scope."},
+{"id":"n5","tier":"negation","text":"The bleeding stopped but then started again and is still going.","expected":"CRITICAL","rationale":"Re-escalation in a later clause overrides the earlier resolution."},
+{"id":"n6","tier":"negation","text":"It was bleeding badly but not anymore, all clear now.","expected":"SERIOUS","rationale":"Resolved haemorrhage. Not minor: recent significant blood loss."},
+{"id":"n7","tier":"negation","text":"Bleeding has not really stopped, it just slowed a little.","expected":"CRITICAL","rationale":"Hedged negation. Flow continues."},
+{"id":"n8","tier":"negation","text":"The bleeding hasn't continued, it stopped right after we packed it.","expected":"SERIOUS","rationale":"An earlier unrelated negation must not carry onto the later affirmed 'stopped'."},
+
+{"id":"p1","tier":"priority","text":"He is not breathing and there is a small cut that stopped bleeding.","expected":"CRITICAL","rationale":"Airway/respiration outranks a resolved minor laceration."},
+{"id":"p2","tier":"priority","text":"She twisted her ankle and blood is pumping out of her calf.","expected":"CRITICAL","rationale":"Massive haemorrhage outranks a sprain."},
+{"id":"p3","tier":"priority","text":"He has a scrape on his knee and has been confused since hitting his head.","expected":"SERIOUS","rationale":"Altered mental state after head trauma outranks a graze."},
+{"id":"p4","tier":"priority","text":"There is a bruise on his shin and a splinter in his palm.","expected":"MINOR","rationale":"Two minor findings; the most urgent is still minor."},
+
+{"id":"x1","tier":"paraphrase","text":"His lips have gone blue and his chest is not moving at all.","expected":"CRITICAL","rationale":"Cyanosis with absent chest rise is respiratory arrest, described without the word 'breathing'."},
+{"id":"x2","tier":"paraphrase","text":"There is a pool of blood under her and it keeps getting bigger.","expected":"CRITICAL","rationale":"Ongoing uncontrolled haemorrhage, described without 'spurting' or 'hasn't stopped'."},
+{"id":"x3","tier":"paraphrase","text":"His skin is cold and clammy, he's grey and his heart is racing.","expected":"SERIOUS","rationale":"Classic compensated shock, described without the word 'shock'."},
+{"id":"x4","tier":"paraphrase","text":"She cannot feel her legs since she fell off the ladder.","expected":"SERIOUS","rationale":"Possible spinal cord injury, described without 'spine' or 'fracture'."},
+{"id":"x5","tier":"paraphrase","text":"The cut is clean, the edges sit together and nothing is coming out.","expected":"MINOR","rationale":"Superficial and haemostatic, described without 'small cut'."},
+{"id":"x6","tier":"paraphrase","text":"He has been in the water for hours, is shaking hard and making no sense.","expected":"SERIOUS","rationale":"Hypothermia with altered mentation, described without the word 'hypothermia'."}
+]

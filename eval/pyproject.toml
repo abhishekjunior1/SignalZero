@@ -1,0 +1,9 @@
+[project]
+name = "signalzero-eval"
+version = "0.1.0"
+description = "Baseline-vs-solution evaluation harness for SignalZero"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic>=0.40",
+    "python-dotenv>=1.0",
+]
