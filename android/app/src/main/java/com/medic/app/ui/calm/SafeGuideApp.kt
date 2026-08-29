@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.sp
 import com.medic.app.demo.DemoScenarioSheet
 import com.medic.app.ui.AppUiState
 import com.medic.app.ui.screens.OrientNavMode
+import com.medic.app.ui.components.StatusStrip
 import com.medic.app.ui.theme.*
 import kotlinx.coroutines.delay
 
@@ -111,6 +112,17 @@ fun SafeGuideApp(
                         onDemoClick = { showDemoSheet = true }
                     )
                 }
+
+                // Signature element (docs/PITCH_OUTLINE.md): which position source
+                // is currently trusted, visible on every screen rather than
+                // buried inside the location screen. The component already
+                // existed but was only wired into LodestarShell, which nothing
+                // calls -- so it never reached the running app.
+                StatusStrip(
+                    positionSource = state.positionState.source,
+                    spoofDetected = state.positionState.spoofDetected,
+                    headingDegrees = state.positionState.headingDegrees
+                )
 
                 if (state.demoBanner != null) {
                     DemoBanner(
