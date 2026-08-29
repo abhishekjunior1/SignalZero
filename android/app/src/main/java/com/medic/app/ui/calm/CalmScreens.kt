@@ -270,7 +270,6 @@ fun FindNorthScreen(
             .padding(14.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        PositionSourceChip(state)
         if (spoofed) {
             Spacer(Modifier.height(10.dp))
             SpoofBanner()
@@ -319,7 +318,7 @@ fun FindNorthScreen(
                 Spacer(Modifier.height(14.dp))
                 Text(
                     text = if (heading != null)
-                        "${heading.roundToInt()}° ${GeoMath.bearingToCardinal(heading)}"
+                        "${heading.roundToInt() % 360}° ${GeoMath.bearingToCardinal(heading)}"
                     else "Point north",
                     color = SgText, fontSize = 30.sp, fontWeight = FontWeight.Medium
                 )
@@ -405,7 +404,7 @@ private fun StarNavDemoPanel(state: AppUiState) {
             }
             state.correctedHeadingDeg?.let { h ->
                 Text(
-                    "True north heading: ${h.roundToInt()}° ${GeoMath.bearingToCardinal(h)}",
+                    "True north heading: ${h.roundToInt() % 360}° ${GeoMath.bearingToCardinal(h)}",
                     color = SgFindNorth.title,
                     fontSize = 15.sp,
                     fontWeight = FontWeight.Medium
@@ -704,7 +703,7 @@ fun HospitalScreen(
                     .padding(14.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("↗", color = SgHospital.icon, fontSize = 28.sp)
+                Text(GeoMath.bearingToArrow(top.bearingDegrees), color = SgHospital.icon, fontSize = 28.sp)
                 Spacer(Modifier.width(12.dp))
                 Column {
                     Text(
@@ -774,7 +773,7 @@ private fun HospitalCard(entry: HospitalWithBearing, primary: Boolean, onGuide: 
         Text(entry.hospital.name, color = SgText, fontSize = 15.sp, fontWeight = FontWeight.Medium)
         Spacer(Modifier.height(6.dp))
         Text(
-            "↗ ${"%.1f".format(entry.distanceKm)} km · $cardinal · ~$walkMin min walk",
+            "${GeoMath.bearingToArrow(entry.bearingDegrees)} ${"%.1f".format(entry.distanceKm)} km · $cardinal · ~$walkMin min walk",
             color = SgTextSecondary, fontSize = 13.sp
         )
         Spacer(Modifier.height(10.dp))

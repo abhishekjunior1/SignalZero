@@ -31,6 +31,25 @@ object GeoMath {
         return (toDegrees(atan2(y, x)) + 360.0) % 360.0
     }
 
+    /**
+     * Arrow glyph pointing along [degrees] (0 = north, clockwise).
+     *
+     * The hospital list previously hard-coded "↗" for every entry, so a
+     * casualty told to head west saw an arrow pointing north-east. Same
+     * 45-degree sectors as [bearingToCardinal] so the glyph and the cardinal
+     * label can never disagree.
+     */
+    fun bearingToArrow(degrees: Double): String = when (bearingToCardinal(degrees)) {
+        "N" -> "\u2191"
+        "NE" -> "\u2197"
+        "E" -> "\u2192"
+        "SE" -> "\u2198"
+        "S" -> "\u2193"
+        "SW" -> "\u2199"
+        "W" -> "\u2190"
+        else -> "\u2196"
+    }
+
     fun bearingToCardinal(degrees: Double): String = when {
         degrees >= 337.5 || degrees < 22.5 -> "N"
         degrees < 67.5 -> "NE"
