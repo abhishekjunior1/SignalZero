@@ -62,7 +62,7 @@ already diverged**, so the app and the evaluation were running different code.
 
 ### 5. Tests
 
-57 unit tests where the pre-existing repository had a small JUnit suite that was
+66 unit tests where the pre-existing repository had a small JUnit suite that was
 not wired into a runnable Gradle target on this platform.
 
 ### 6. UI correctness fixes

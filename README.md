@@ -72,9 +72,9 @@ Full evidence: **[docs/IMPROVEMENT_CHANGELOG.md](docs/IMPROVEMENT_CHANGELOG.md)*
 | | |
 |---|---|
 | **Triage** | Describe an injury in plain language; get a severity and an ordered directive from a deterministic TCCC/MARCH safety tree. |
-| **Find north without GPS** | Solar compass by day, star plate-solve by night, dead-reckoning between fixes. A persistent strip shows which position source is currently trusted. |
+| **Find north without GPS** | Solar compass by day, star plate-solve by night, and a position-source state machine with a simulated spoof trigger (dead reckoning is a state label, not an implemented estimator). A persistent strip shows which position source is currently trusted. |
 | **Nearby people** | Phone-to-phone messaging with no network, including a priority SOS that carries position and trust state. Messages are held and passed on when someone new comes into range. |
-| **Translate** | Medic-to-casualty phrases, on device. |
+| **Translate** | Medic-to-casualty phrase screen. The on-device translation model is not implemented; the screen states this. |
 | **Nearest hospital** | Offline dataset, ranked by great-circle distance with a bearing arrow. |
 
 ## Running it
@@ -88,7 +88,7 @@ Linux/Windows notes and expected output, in
 **[docs/REPRODUCTION.md](docs/REPRODUCTION.md)**.
 
 ```bash
-./gradlew :shared:testDebugUnitTest   # 57 unit tests
+./gradlew :shared:testDebugUnitTest   # 66 unit tests
 bash scripts/smoke_test.sh            # drives every screen on a live emulator
 ```
 
@@ -110,7 +110,7 @@ those come from the safety tree, which is the part under measurement.
 ```
 shared/      Kotlin Multiplatform domain logic — safety tree, navigation,
              mesh routing, retrieval. Compiles for Android, iOS and JVM.
-             57 tests live here.
+             66 tests live here.
 android/     The Compose app.
 eval/        24-case corpus, scorer, LLM baseline, cached responses.
 scripts/     Toolchain setup, smoke test, reference implementations.

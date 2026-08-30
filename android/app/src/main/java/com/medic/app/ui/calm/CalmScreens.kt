@@ -232,7 +232,9 @@ fun TranslateScreen(
         }
         Spacer(Modifier.height(8.dp))
         Text(
-            "Runs on-device. A medic and an injured person can pass the phone back and forth.",
+            "Translation needs an on-device model that is not present on this hardware, "
+                + "so this screen echoes your text for now. A medic and an injured "
+                + "person can pass the phone back and forth once a model is installed.",
             color = SgTextMuted, fontSize = 12.sp
         )
     }
