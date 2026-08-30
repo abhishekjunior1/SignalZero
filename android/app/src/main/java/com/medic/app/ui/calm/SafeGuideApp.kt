@@ -191,7 +191,7 @@ private fun IntroSplash() {
                 Icon(Icons.Filled.HealthAndSafety, contentDescription = null, tint = SgHospital.icon, modifier = Modifier.size(44.dp))
             }
             Spacer(Modifier.height(16.dp))
-            Text("SafeGuide", color = SgText, fontSize = 28.sp, fontWeight = FontWeight.Medium)
+            Text("SignalZero", color = SgText, fontSize = 28.sp, fontWeight = FontWeight.Medium)
             Spacer(Modifier.height(4.dp))
             Text("Offline survival assistant", color = SgTextMuted, fontSize = 14.sp)
         }
@@ -206,7 +206,7 @@ private fun HomeTopBar(demoActive: Boolean, onDemoClick: () -> Unit) {
             .padding(horizontal = 18.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(text = "SafeGuide", color = SgTextSecondary, fontSize = 14.sp)
+        Text(text = "SignalZero", color = SgTextSecondary, fontSize = 14.sp)
         Spacer(Modifier.weight(1f))
         OfflineStatusRow(demoActive = demoActive, onDemoClick = onDemoClick)
     }

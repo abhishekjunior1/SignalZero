@@ -1,4 +1,4 @@
-# Lodestar — offline first aid, navigation, and messaging
+# SignalZero — offline first aid, navigation, and messaging
 
 An Android app for when there is no signal: first-aid triage, direction-finding
 without GPS, and phone-to-phone messaging. Everything runs on the device.

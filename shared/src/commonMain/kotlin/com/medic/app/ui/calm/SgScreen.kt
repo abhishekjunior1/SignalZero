@@ -9,7 +9,7 @@ package com.medic.app.ui.calm
  * The package is deliberately unchanged so existing imports still resolve.
  */
 enum class SgScreen(val title: String) {
-    HOME("SafeGuide"),
+    HOME("SignalZero"),
     ASSISTANT("Assistant"),
     TRANSLATE("Translate"),
     LOCATION("My location"),

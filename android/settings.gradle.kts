@@ -12,5 +12,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Lodestar"
+rootProject.name = "SignalZero"
 include(":app")

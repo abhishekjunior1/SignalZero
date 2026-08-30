@@ -5,7 +5,7 @@ before the competition and what you added."*
 
 ## What existed before
 
-This project builds on **[Lodestar](https://github.com/arpan-s-dev/LodeStar)**,
+SignalZero builds on **[Lodestar](https://github.com/arpan-s-dev/LodeStar)**,
 an offline first-aid and navigation Android app, MIT licensed, © 2026 Arpanjeet
 Singh and Manjeet Singh. Its original copyright notice is retained in
 [`LICENSE`](../LICENSE) as that licence requires.
