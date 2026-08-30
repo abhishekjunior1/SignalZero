@@ -20,6 +20,12 @@ import com.medic.app.data.Hospital
 import com.medic.app.data.HospitalFinder
 import com.medic.app.data.HospitalWithBearing
 import com.medic.app.data.OfflineAssetLoader
+import com.medic.app.mesh.DemoMeshPeers
+import com.medic.app.mesh.MeshNetwork
+import com.medic.app.mesh.MeshPeer
+import com.medic.app.mesh.MeshService
+import com.medic.app.mesh.MeshUiState
+import com.medic.app.mesh.SimulatedMeshTransport
 import com.medic.app.nav.PositionSource
 import com.medic.app.nav.PositionState
 import com.medic.app.nav.PositionStateMachine
@@ -62,6 +68,7 @@ data class AppUiState(
         lastTrustedLon = -122.4194
     ),
     val nearestHospitals: List<HospitalWithBearing> = emptyList(),
+    val mesh: MeshUiState = MeshUiState(),
 
     // Device position fix backing the nearest-hospital ranking. Until a real
     // fix arrives, the app falls back to a cached approximate position.
@@ -121,8 +128,65 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val _uiState = MutableStateFlow(AppUiState())
     val uiState: StateFlow<AppUiState> = _uiState.asStateFlow()
 
+    /**
+     * Offline person-to-person mesh.
+     *
+     * Runs on [SimulatedMeshTransport] here because neither an emulator nor this
+     * build has a BLE radio path: an emulator has no Bluetooth LE at all, and
+     * two emulators cannot discover each other. The routing rules are the same
+     * code either way -- swapping in a real transport touches only this block.
+     * The UI states plainly that peers are simulated.
+     */
+    private val meshNetwork = MeshNetwork()
+    private val meshSelfId = "self-" + UUID.randomUUID().toString().take(8)
+    private val meshService = MeshService(
+        selfId = meshSelfId,
+        selfName = "You",
+        transport = SimulatedMeshTransport(MeshPeer(meshSelfId, "You"), meshNetwork),
+        scope = viewModelScope,
+        clock = { System.currentTimeMillis() },
+        idFactory = { UUID.randomUUID().toString() },
+        simulated = true,
+    )
+
+    fun onMeshDraftChange(text: String) = meshService.onDraftChange(text)
+
+    fun onMeshSend() {
+        viewModelScope.launch { meshService.send() }
+    }
+
+    fun onMeshSos() {
+        // Reuse whatever the triage flow already established, so an SOS carries
+        // real information rather than a bare distress ping.
+        val severity = _uiState.value.messages.lastOrNull { it.sender == Sender.SYSTEM }
+        val body = buildString {
+            append("SOS from this device.")
+            val pos = _uiState.value.positionState
+            if (pos.lastTrustedLat != null && pos.lastTrustedLon != null) {
+                append(" Approx ")
+                append(String.format("%.4f, %.4f", pos.lastTrustedLat, pos.lastTrustedLon))
+            }
+            append(" Source: ")
+            append(pos.source.name)
+        }
+        viewModelScope.launch { meshService.sendSos(body) }
+    }
+
+    private fun startMesh() {
+        viewModelScope.launch {
+            meshService.start()
+            DemoMeshPeers.start(meshNetwork, viewModelScope) { System.currentTimeMillis() }
+        }
+        viewModelScope.launch {
+            meshService.state.collect { m ->
+                _uiState.value = _uiState.value.copy(mesh = m)
+            }
+        }
+    }
+
     init {
         AiServiceFactory.create(application, viewModelScope)
+        startMesh()
         voiceLoop.initTts()
         val (kitDisclaimer, kitItems) = OfflineAssetLoader.loadFieldKit(getApplication())
         _uiState.value = _uiState.value.copy(

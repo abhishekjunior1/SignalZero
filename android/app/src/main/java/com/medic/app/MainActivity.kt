@@ -144,6 +144,9 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     onSetSpoof = viewModel::setSpoofDemo,
+                    onMeshDraftChange = viewModel::onMeshDraftChange,
+                    onMeshSend = viewModel::onMeshSend,
+                    onMeshSos = viewModel::onMeshSos,
                     onMedicTextChange = viewModel::onMedicTextChange,
                     onTranslate = { viewModel.onTranslate() },
                     onRunDemoScenario = viewModel::runDemoScenario,

@@ -14,5 +14,6 @@ enum class SgScreen(val title: String) {
     TRANSLATE("Translate"),
     LOCATION("My location"),
     MEDICAL("Medical help"),
-    HOSPITAL("Nearby hospital")
+    HOSPITAL("Nearby hospital"),
+    MESH("Nearby people")
 }

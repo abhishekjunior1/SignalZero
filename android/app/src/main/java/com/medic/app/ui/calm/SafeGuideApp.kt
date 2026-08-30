@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ChatBubbleOutline
 import androidx.compose.material.icons.filled.Explore
+import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.HealthAndSafety
 import androidx.compose.material.icons.filled.LocalHospital
@@ -37,17 +38,9 @@ import com.medic.app.demo.DemoScenarioSheet
 import com.medic.app.ui.AppUiState
 import com.medic.app.ui.screens.OrientNavMode
 import com.medic.app.ui.components.StatusStrip
+import com.medic.app.ui.screens.MeshScreen
 import com.medic.app.ui.theme.*
 import kotlinx.coroutines.delay
-
-enum class SgScreen(val title: String) {
-    HOME("SafeGuide"),
-    ASSISTANT("Assistant"),
-    TRANSLATE("Translate"),
-    LOCATION("My location"),
-    MEDICAL("Medical help"),
-    HOSPITAL("Nearby hospital")
-}
 
 /**
  * Calm consumer shell. The app opens with a brief intro animation, then a Home
@@ -67,6 +60,9 @@ fun SafeGuideApp(
     onPickNightSkyImage: () -> Unit,
     onAddWoundPhoto: () -> Unit,
     onSetSpoof: (Boolean) -> Unit,
+    onMeshDraftChange: (String) -> Unit,
+    onMeshSend: () -> Unit,
+    onMeshSos: () -> Unit,
     onMedicTextChange: (String) -> Unit,
     onTranslate: () -> Unit,
     onRunDemoScenario: (com.medic.app.demo.DemoScenario) -> Unit,
@@ -138,6 +134,12 @@ fun SafeGuideApp(
                         SgScreen.TRANSLATE -> TranslateScreen(state, onMedicTextChange, onTranslate)
                         SgScreen.LOCATION -> FindNorthScreen(state, onOrientNavModeChange, onUseMyLocation, onSightSun, onPickNightSkyImage, onSetSpoof)
                         SgScreen.MEDICAL -> MedicalScreen(state, onAddWoundPhoto)
+                        SgScreen.MESH -> MeshScreen(
+                            state = state.mesh,
+                            onDraftChange = onMeshDraftChange,
+                            onSend = onMeshSend,
+                            onSos = onMeshSos,
+                        )
                         SgScreen.HOSPITAL -> HospitalScreen(
                             state = state,
                             onUseMyLocation = onUseMyLocation,
@@ -356,6 +358,10 @@ private fun HomeScreen(onSelect: (SgScreen) -> Unit) {
             QuickTile("Medical help", "First aid and kit", Icons.Filled.FavoriteBorder, SgMedical) { onSelect(SgScreen.MEDICAL) }
             QuickTile("Nearby hospital", "Closest care", Icons.Filled.LocalHospital, SgHospital) { onSelect(SgScreen.HOSPITAL) }
         }
+        Spacer(Modifier.height(10.dp))
+        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+            QuickTile("Nearby people", "Message with no signal", Icons.Filled.Groups, SgAssistant) { onSelect(SgScreen.MESH) }
+        }
         Spacer(Modifier.height(24.dp))
     }
 }
@@ -419,7 +425,7 @@ private fun SgBottomBar(current: SgScreen, onSelect: (SgScreen) -> Unit) {
                 .padding(top = 8.dp, bottom = 8.dp),
             verticalAlignment = Alignment.Bottom
         ) {
-            SideNavItem(SgScreen.TRANSLATE, "Translate", Icons.Filled.Translate, current, onSelect, Modifier.weight(1f))
+            SideNavItem(SgScreen.MESH, "Nearby", Icons.Filled.Groups, current, onSelect, Modifier.weight(1f))
             SideNavItem(SgScreen.LOCATION, "Location", Icons.Filled.Explore, current, onSelect, Modifier.weight(1f))
             CenterAssistantItem(selected = current == SgScreen.ASSISTANT, onClick = { onSelect(SgScreen.ASSISTANT) }, modifier = Modifier.weight(1f))
             SideNavItem(SgScreen.MEDICAL, "Medical", Icons.Filled.FavoriteBorder, current, onSelect, Modifier.weight(1f))
