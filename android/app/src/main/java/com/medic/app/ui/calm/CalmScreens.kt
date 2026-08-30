@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.medic.app.data.FieldKitItem
 import com.medic.app.data.GeoMath
+import com.medic.app.data.HospitalFinder
 import com.medic.app.data.HospitalWithBearing
 import com.medic.app.nav.PositionSource
 import com.medic.app.ui.AppUiState
@@ -694,7 +695,44 @@ fun HospitalScreen(
             .padding(14.dp)
     ) {
         val top = state.nearestHospitals.firstOrNull()
-        if (top != null) {
+        val outOfCoverage = HospitalFinder.outOfCoverage(state.nearestHospitals)
+
+        if (outOfCoverage) {
+            // The bundled dataset covers a fixed set of regions. Ranking by
+            // distance regardless would offer the nearest entry however far it
+            // is -- for a position in eastern India that was San Francisco,
+            // 12,622 km away, rendered as a 105-day walk. Say there is no data
+            // instead of routing someone across an ocean.
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(SgMedical.tile)
+                    .padding(16.dp)
+            ) {
+                Text(
+                    "No hospital data for your area",
+                    color = SgMedical.title, fontSize = 17.sp, fontWeight = FontWeight.Medium
+                )
+                Spacer(Modifier.height(6.dp))
+                Text(
+                    "This app carries an offline list for a limited set of regions, and " +
+                        "your position is outside them. Use local emergency numbers or " +
+                        "ask over Nearby people.",
+                    color = SgMedical.subtitle, fontSize = 13.sp, lineHeight = 19.sp
+                )
+                top?.let {
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "Nearest entry in the offline list is ${"%.0f".format(it.distanceKm)} km away.",
+                        color = SgTextMuted, fontSize = 12.sp
+                    )
+                }
+            }
+            Spacer(Modifier.height(12.dp))
+        }
+
+        if (top != null && !outOfCoverage) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -737,7 +775,9 @@ fun HospitalScreen(
         }
 
         Spacer(Modifier.height(14.dp))
-        if (state.nearestHospitals.isEmpty()) {
+        if (outOfCoverage) {
+            // list intentionally omitted; the banner above explains why
+        } else if (state.nearestHospitals.isEmpty()) {
             Text(
                 "No position yet. Tap “Use my location” to estimate the nearest hospital.",
                 color = SgText, fontSize = 14.sp
