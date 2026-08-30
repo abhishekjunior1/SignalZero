@@ -1,0 +1,25 @@
+Nearby people
+Demo
+Offline ready
+GPS_TRUSTED
+2 people in range
+Rin, Tomás
+Simulated peers — this device has no mesh radio available.
+Tomás
+SOS
+Leg injury at the north trail marker. Bleeding controlled.
+direct
+Rin
+I have a first aid kit and about 2L of water.
+direct
+You
+moving to the north
+You
+SOS
+SOS from this device. Approx 37.4220, -122.0840 Source: GPS_TRUSTED
+Broadcast SOS
+Nearby
+Location
+Assistant
+Medical
+Hospital

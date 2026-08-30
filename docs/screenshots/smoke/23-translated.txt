@@ -1,0 +1,27 @@
+Medical help
+Demo
+Offline ready
+GPS_TRUSTED
+Check a wound with a photo
+Add a photo of the injury and the assistant flags possible infection signs. Reference only.
+Add wound photo
+Severe bleeding
+Follow these steps in order
+1
+Press hard on the wound with a clean cloth.
+2
+Keep pressing for 10 minutes without lifting.
+3
+Raise the wound above the heart and wrap it.
+What's in my kit
+Antiseptic wipes
+Sterile gauze / dressing
+Commercial tourniquet
+Adhesive bandages
+Oral pain reliever (general OTC)
+Oral antihistamine (general OTC)
+Nearby
+Location
+Assistant
+Medical
+Hospital

@@ -1,0 +1,11 @@
+Assistant
+Demo
+Offline ready
+GPS_TRUSTED
+Offline first-aid assistant ready. Describe an injury, or press the mic to speak. Reference only — not a diagnosis or prescription.
+Type a message…
+Nearby
+Location
+Assistant
+Medical
+Hospital

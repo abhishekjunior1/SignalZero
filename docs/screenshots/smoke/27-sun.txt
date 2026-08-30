@@ -1,0 +1,19 @@
+My location
+Demo
+Offline ready
+SOLAR_FIX
+heading 166°
+Approximate location
+Your position ~37.4220, -122.0840 ±5 m
+Update
+0° N
+Hold the phone flat and turn slowly
+Day
+Night
+Sight the sun to calibrate
+Auto-detects day or night. Toggle is here for the demo.
+Nearby
+Location
+Assistant
+Medical
+Hospital

@@ -1,0 +1,18 @@
+My location
+Demo
+Offline ready
+GPS_TRUSTED
+Approximate location
+Your position ~37.4220, -122.0840 ±5 m
+Update
+0° N
+Import a night-sky photo to read true north
+Day
+Night
+Import night-sky photo
+Auto-detects day or night. Toggle is here for the demo.
+Nearby
+Location
+Assistant
+Medical
+Hospital

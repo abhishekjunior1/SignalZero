@@ -1,0 +1,24 @@
+Nearby hospital
+Demo
+Offline ready
+SOLAR_FIX
+heading 166°
+↘
+Head south-east
+Closest hospital is 6.6 km away
+Your position ~37.4220, -122.0840 ±5 m
+Update my location
+El Camino Health, Mountain View
+↘ 6.6 km · SE · ~80 min walk
+Guide me there
+Stanford Health Care, Palo Alto
+← 8.2 km · W · ~99 min walk
+Guide me there
+Lucile Packard Children's Hospital, Palo Alto
+← 8.3 km · W · ~99 min walk
+Guide me there
+Nearby
+Location
+Assistant
+Medical
+Hospital

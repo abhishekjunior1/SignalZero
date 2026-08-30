@@ -94,6 +94,11 @@ fun SafeGuideApp(
                     .fillMaxSize()
                     .background(SgBg)
                     .statusBarsPadding()
+                    // Without this the soft keyboard draws over the message
+                    // composers on the assistant and mesh screens: the field
+                    // takes focus but sits behind the keyboard, so typing is
+                    // invisible. Needs adjustResize in the manifest to work.
+                    .imePadding()
             ) {
                 if (screen == SgScreen.HOME) {
                     HomeTopBar(
@@ -345,6 +350,37 @@ private fun HomeScreen(onSelect: (SgScreen) -> Unit) {
             }
         }
 
+        Spacer(Modifier.height(12.dp))
+
+        // Full width rather than a grid tile: with no signal this is the only
+        // way to reach another person, so it should not be the smallest thing
+        // on the screen.
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(16.dp))
+                .background(SgHospital.tile)
+                .clickable { onSelect(SgScreen.MESH) }
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(52.dp)
+                    .clip(CircleShape)
+                    .background(SgHospital.chip),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(Icons.Filled.Groups, contentDescription = null, tint = SgHospital.icon, modifier = Modifier.size(26.dp))
+            }
+            Spacer(Modifier.width(14.dp))
+            Column(Modifier.weight(1f)) {
+                Text("Message people nearby", color = SgHospital.title, fontSize = 18.sp, fontWeight = FontWeight.Medium)
+                Spacer(Modifier.height(2.dp))
+                Text("Phone to phone, no network", color = SgHospital.subtitle, fontSize = 13.sp)
+            }
+        }
+
         Spacer(Modifier.height(20.dp))
         Text("Tools", color = SgTextSecondary, fontSize = 13.sp, fontWeight = FontWeight.Medium)
         Spacer(Modifier.height(12.dp))
@@ -358,11 +394,8 @@ private fun HomeScreen(onSelect: (SgScreen) -> Unit) {
             QuickTile("Medical help", "First aid and kit", Icons.Filled.FavoriteBorder, SgMedical) { onSelect(SgScreen.MEDICAL) }
             QuickTile("Nearby hospital", "Closest care", Icons.Filled.LocalHospital, SgHospital) { onSelect(SgScreen.HOSPITAL) }
         }
-        Spacer(Modifier.height(10.dp))
-        Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            QuickTile("Nearby people", "Message with no signal", Icons.Filled.Groups, SgAssistant) { onSelect(SgScreen.MESH) }
-        }
-        Spacer(Modifier.height(24.dp))
+        // Clears the bottom navigation bar, which draws over this column.
+        Spacer(Modifier.height(96.dp))
     }
 }
 
