@@ -324,14 +324,55 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun onMicToggle() {
+        // RECORD_AUDIO is declared in the manifest but was never requested at
+        // runtime, so on a fresh install AudioRecord.startRecording() threw and
+        // the exception escaped this coroutine -- tapping the app's most
+        // prominent control killed it. Check before touching the recorder.
+        val app = getApplication<Application>()
+        val hasMic = androidx.core.content.ContextCompat.checkSelfPermission(
+            app, android.Manifest.permission.RECORD_AUDIO
+        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
+
+        if (!hasMic) {
+            _uiState.value = _uiState.value.copy(isListening = false)
+            appendAssistantReply(
+                "Voice input needs microphone permission. Grant it in Settings, " +
+                    "or type the description instead.",
+                severity = null, citedChunkIds = emptyList(), speak = false,
+            )
+            return
+        }
+
         val nowListening = !_uiState.value.isListening
         _uiState.value = _uiState.value.copy(isListening = nowListening)
         if (!nowListening) return // stopping is handled by recordUntilStopped's isCancelled check
 
         viewModelScope.launch {
-            val pcm = voiceLoop.recordUntilStopped(isCancelled = { !_uiState.value.isListening })
+            val transcript = runCatching {
+                val pcm = voiceLoop.recordUntilStopped(isCancelled = { !_uiState.value.isListening })
+                AiServiceFactory.create(app, viewModelScope).transcribe(pcm)
+            }.getOrElse { e ->
+                _uiState.value = _uiState.value.copy(isListening = false)
+                appendAssistantReply(
+                    "Could not record audio (${e.javaClass.simpleName}). Type the " +
+                        "description instead.",
+                    severity = null, citedChunkIds = emptyList(), speak = false,
+                )
+                return@launch
+            }
             _uiState.value = _uiState.value.copy(isListening = false)
-            val transcript = AiServiceFactory.create(getApplication(), viewModelScope).transcribe(pcm)
+
+            // StubAiService returns a developer placeholder for transcribe().
+            // Submitting it would render '[STUB TRANSCRIPT] ...' as the user's
+            // own message. Say plainly that speech recognition is unavailable.
+            if (transcript.startsWith("[STUB")) {
+                appendAssistantReply(
+                    "Speech recognition needs an on-device model that is not " +
+                        "present on this hardware. Type the description instead.",
+                    severity = null, citedChunkIds = emptyList(), speak = false,
+                )
+                return@launch
+            }
             if (transcript.isNotBlank()) {
                 submitQuery(transcript)
             }

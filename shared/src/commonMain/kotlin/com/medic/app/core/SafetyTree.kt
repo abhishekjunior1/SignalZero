@@ -51,8 +51,10 @@ data class TriageResult(
  */
 object NegationAwareMatcher {
 
+    // Matched against whole tokens, except the contraction suffix which is
+    // checked as a word ending.
     private val negationCues = listOf(
-        "not", "n't", "no ", "never", "none", "without", "lacking", "unable to"
+        "not", "no", "never", "none", "without", "lacking", "unable"
     )
 
     // Words that, if found between a negation cue and the target phrase,
@@ -65,20 +67,30 @@ object NegationAwareMatcher {
 
     fun isNegated(text: String, phraseIndex: Int): Boolean {
         val before = text.substring(0, phraseIndex)
-        val words = before.trim().split(Regex("\\s+"))
+        // Whole words only. Matching "not" as a substring meant "another",
+        // "knotted" and "noticed" all read as negations, so "I noticed the
+        // bleeding stopped" escalated to CRITICAL.
+        // Words and punctuation both become tokens: commas and full stops are
+        // reset markers, so discarding them would let a negation reach across a
+        // clause boundary it should not cross.
+        val words = Regex("[a-zA-Z']+|[.,;]")
+            .findAll(before)
+            .map { it.value }
+            .toList()
         val window = words.takeLast(WINDOW_WORDS).joinToString(" ")
 
         // If a reset word appears after the last negation cue in the window,
         // the negation cue doesn't reach the phrase.
         var lastNegationPos = -1
         var lastResetPos = -1
-        for (cue in negationCues) {
-            val pos = window.lastIndexOf(cue)
-            if (pos > lastNegationPos) lastNegationPos = pos
+        for ((i, w) in words.takeLast(WINDOW_WORDS).withIndex()) {
+            val lower = w.lowercase()
+            if (lower in negationCues || lower.endsWith("n't")) {
+                if (i > lastNegationPos) lastNegationPos = i
+            }
         }
-        for (reset in resetWords) {
-            val pos = window.lastIndexOf(reset)
-            if (pos > lastResetPos) lastResetPos = pos
+        for ((i, w) in words.takeLast(WINDOW_WORDS).withIndex()) {
+            if (w.lowercase() in resetWords && i > lastResetPos) lastResetPos = i
         }
         if (lastNegationPos == -1) return false
         return lastNegationPos > lastResetPos
@@ -99,7 +111,10 @@ object BleedingClassifier {
     private val activeBleedPhrases = listOf(
         "bleeding", "blood", "spurting", "gushing", "hemorrhage", "wound is open"
     )
-    private val stoppedCues = listOf("stopped", "controlled", "under control", "stable now", "slowed")
+    // "slowed" is deliberately absent: bleeding that has slowed is still
+    // bleeding, and treating it as controlled produced the same reassuring
+    // directive that this classifier was already corrected for once.
+    private val stoppedCues = listOf("stopped", "controlled", "under control", "stable now")
     private val resolvedQualifiers = listOf("now", "finally", "already", "successfully")
     // Markers of arterial or otherwise uncontrolled haemorrhage. "pumping",
     // "pouring" and a growing pool were absent and are ordinary lay phrasing:
@@ -200,9 +215,20 @@ object BleedingClassifier {
 
 object SafetyTree {
 
+    // Absent respiration or pulse: CPR is the correct action.
     private val notBreathingPhrases = listOf(
         "not breathing", "isn't breathing", "stopped breathing", "no breathing",
-        "not breathe", "can't breathe", "cannot breathe", "no pulse", "not responsive and not breathing"
+        "not breathe", "no pulse", "not responsive and not breathing"
+    )
+
+    // Struggling to breathe is NOT the same as not breathing. A choking,
+    // asthmatic or anaphylactic casualty saying "I can't breathe" has a pulse,
+    // and starting CPR on them is harmful. These were in the list above, so the
+    // app told a conscious patient to begin chest compressions.
+    private val airwayDistressPhrases = listOf(
+        "can't breathe", "cannot breathe", "cant breathe", "choking", "choke",
+        "struggling to breathe", "trouble breathing", "hard to breathe",
+        "gasping", "wheezing", "throat is closing", "closing up"
     )
     private val severeBurnPhrases = listOf(
         "third degree", "3rd degree", "third-degree", "charred", "white and leathery",
@@ -233,25 +259,29 @@ object SafetyTree {
         }
 
         // Priority 2: bleeding (negation-aware)
+        // Uncontrolled haemorrhage is CRITICAL and returns immediately.
+        // A *controlled* bleed is only SERIOUS, so it must not short-circuit the
+        // CRITICAL checks below it. Returning unconditionally here meant
+        // "third degree burn on his arm, the bleeding has stopped" was reported
+        // as SERIOUS with a directive that never mentioned the burn.
         val bleed = BleedingClassifier.classify(text)
-        if (bleed != null) {
-            when (bleed.state) {
-                BleedingClassifier.BleedState.UNCONTROLLED -> return TriageResult(
-                    Severity.CRITICAL, "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED",
-                    "Apply firm direct pressure or a tourniquet now. Do not wait for the bleeding to look worse before acting.",
-                    input
-                )
-                BleedingClassifier.BleedState.CONTROLLED -> return TriageResult(
-                    Severity.SERIOUS, "BLEEDING_CONTROLLED",
-                    "Bleeding is controlled. Watch for shock, keep the casualty warm, and monitor the dressing/tourniquet.",
-                    input
-                )
-                BleedingClassifier.BleedState.STATUS_NOT_STATED -> return TriageResult(
-                    Severity.SERIOUS, "BLEEDING_STATUS_UNKNOWN",
-                    "Apply firm direct pressure and watch whether the bleeding slows. Treat it as active until you can see that it has stopped.",
-                    input
-                )
-            }
+        if (bleed?.state == BleedingClassifier.BleedState.UNCONTROLLED) {
+            return TriageResult(
+                Severity.CRITICAL, "ACTIVE_ARTERIAL_OR_UNCONTROLLED_BLEED",
+                "Apply firm direct pressure or a tourniquet now. Do not wait for the bleeding to look worse before acting.",
+                input
+            )
+        }
+
+        // Priority 2b: airway distress. Distinct from absent respiration --
+        // the casualty is breathing, badly, and must not be given CPR.
+        if (airwayDistressPhrases.any { text.contains(it) }) {
+            return TriageResult(
+                Severity.CRITICAL, "AIRWAY_DISTRESS",
+                "Keep them upright and calm. If they are choking, give firm back blows between the shoulder blades. " +
+                    "Do NOT start CPR while they still have a pulse. Seek urgent help.",
+                input
+            )
         }
 
         // Priority 3: severe burns
@@ -261,6 +291,21 @@ object SafetyTree {
                 "Cover loosely with a clean dry cloth, treat for shock, and seek urgent evacuation. Do not apply ice or extensive cooling.",
                 input
             )
+        }
+
+        // Non-critical bleeding, now that every CRITICAL rule has had its turn.
+        when (bleed?.state) {
+            BleedingClassifier.BleedState.CONTROLLED -> return TriageResult(
+                Severity.SERIOUS, "BLEEDING_CONTROLLED",
+                "Bleeding is controlled. Watch for shock, keep the casualty warm, and monitor the dressing/tourniquet.",
+                input
+            )
+            BleedingClassifier.BleedState.STATUS_NOT_STATED -> return TriageResult(
+                Severity.SERIOUS, "BLEEDING_STATUS_UNKNOWN",
+                "Apply firm direct pressure and watch whether the bleeding slows. Treat it as active until you can see that it has stopped.",
+                input
+            )
+            else -> Unit
         }
 
         // Priority 4: SERIOUS

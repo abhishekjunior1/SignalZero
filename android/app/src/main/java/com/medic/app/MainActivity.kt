@@ -64,7 +64,10 @@ class MainActivity : ComponentActivity() {
             requestLocationPermission.launch(
                 arrayOf(
                     Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    // Declared in the manifest but never requested, so the mic
+                    // threw on first use and killed the app.
+                    Manifest.permission.RECORD_AUDIO
                 )
             )
         }

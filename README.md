@@ -27,7 +27,7 @@ answer is more interesting than the claim:
 | LLM only (one prompt) | 66.7% | 9.1% | 4 |
 | Safety tree, as it shipped | 66.7% | 27.3% | 0 |
 | Safety tree, after the fix below | 75.0% | 9.1% | 0 |
-| **Hybrid — what ships now** | **83.3%** | **0.0%** | 2 |
+| **Hybrid — gated composition (evaluated)** | **83.3%** | **0.0%** | 2 |
 
 *Critical-miss rate is the share of life-threatening cases rated less severe.
 It is the primary metric because rating a haemorrhage as MODERATE and rating a
@@ -35,9 +35,18 @@ graze as MINOR are both "one wrong answer", and only one of them kills someone.*
 
 **Neither approach is better than the other. They fail in opposite directions.**
 The deterministic tree is perfect on negation and blind to paraphrase; the LLM is
-the reverse and over-triages. The shipping architecture lets the LLM speak only
-where the tree returned UNKNOWN — 5 of 24 cases — so coverage improves and no
-CRITICAL can ever be softened.
+the reverse and over-triages four times where the tree never does once.
+
+The last row composes them: the LLM answers only where the tree returned UNKNOWN
+— 5 of 24 cases — so coverage improves and no CRITICAL can be softened, because
+on any case the tree answered the model is never consulted.
+
+**What the app does today is not yet that gate.** The severity chip and, when no
+on-device model is present, the directive both come from the tree; where a model
+*is* present the app shows the model's answer beneath the tree's severity,
+ungated. Wiring the evaluated gate into `TriageOrchestrator` is the next change,
+and it is the one the measurement above argues for. The 0.0% row describes the
+composition as evaluated, not as shipped.
 
 ## The bug the evaluation found
 

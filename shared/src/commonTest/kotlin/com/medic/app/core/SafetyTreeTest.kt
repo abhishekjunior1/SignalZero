@@ -2,6 +2,7 @@ package com.medic.app.core
 
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 /**
  * Ported from the Android-only JUnit suite to kotlin.test so it runs on both
@@ -129,5 +130,75 @@ class SafetyTreeTest {
     fun noMatchIsUnknown() {
         val result = SafetyTree.evaluate("My foot feels weird today")
         assertEquals(Severity.UNKNOWN, result.severity)
+    }
+}
+
+/**
+ * Regressions found by an independent review, all of the same shape as the
+ * arterial-bleeding defect: the tree answering confidently and wrongly.
+ */
+class SafetyTreeReviewRegressionTest {
+
+    @Test
+    fun cannotBreatheIsNotTreatedAsAbsentBreathing() {
+        // A choking, asthmatic or anaphylactic casualty saying "I can't breathe"
+        // has a pulse. The tree previously matched this as NOT_BREATHING and
+        // told the user to start chest compressions.
+        val r = SafetyTree.evaluate("I can't breathe, something is stuck in my throat")
+        assertEquals(Severity.CRITICAL, r.severity)
+        assertEquals("AIRWAY_DISTRESS", r.matchedRule)
+        assertTrue(
+            !r.directive.contains("CPR") || r.directive.contains("Do NOT start CPR"),
+            "must not instruct CPR on a casualty who still has a pulse: ${r.directive}",
+        )
+    }
+
+    @Test
+    fun absentBreathingStillGetsCpr() {
+        val r = SafetyTree.evaluate("he is not breathing and has no pulse")
+        assertEquals("NOT_BREATHING", r.matchedRule)
+        assertTrue(r.directive.contains("CPR"))
+    }
+
+    @Test
+    fun severeBurnIsNotShadowedByControlledBleeding() {
+        // A SERIOUS bleeding verdict used to return before the CRITICAL burn
+        // rule was ever reached.
+        val r = SafetyTree.evaluate(
+            "third degree burn on his arm, the bleeding has stopped now"
+        )
+        assertEquals(Severity.CRITICAL, r.severity)
+        assertEquals("SEVERE_BURN", r.matchedRule)
+    }
+
+    @Test
+    fun slowedBleedingIsNotReportedAsControlled() {
+        // Bleeding that has slowed is still bleeding.
+        val r = SafetyTree.evaluate("the bleeding slowed a lot after we packed it")
+        assertTrue(
+            r.matchedRule != "BLEEDING_CONTROLLED",
+            "slowed bleeding must not produce the 'bleeding is controlled' directive",
+        )
+    }
+
+    @Test
+    fun ordinaryWordsContainingNotAreNotNegations() {
+        // "another", "knotted" and "noticed" all contain the substring "not".
+        for (phrase in listOf(
+            "I put another bandage on and the bleeding stopped",
+            "we knotted a tourniquet and the bleeding stopped",
+            "I noticed the bleeding stopped",
+        )) {
+            assertEquals(
+                Severity.SERIOUS, SafetyTree.evaluate(phrase).severity,
+                "substring match on 'not' wrongly escalated: $phrase",
+            )
+        }
+    }
+
+    @Test
+    fun realNegationsStillEscalate() {
+        assertEquals(Severity.CRITICAL, SafetyTree.evaluate("the bleeding hasn't stopped").severity)
+        assertEquals(Severity.CRITICAL, SafetyTree.evaluate("it has not stopped bleeding").severity)
     }
 }

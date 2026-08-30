@@ -16,7 +16,7 @@ metric and is useless.
 | **Baseline B** | One direct prompt to Claude with the severity scale and the task. The "one direct prompt" baseline the brief names. | 66.7% | 9.1% | **4** | Kept as the comparison |
 | **Iteration 1** | Ran the pre-existing safety tree against the corpus for the first time. | 66.7% | 27.3% | 0 | **Exposed a bug — see below** |
 | **Iteration 2** | Fixed the two defects iteration 1 surfaced. | 75.0% | 9.1% | 0 | Kept |
-| **Iteration 3** | Let the LLM answer only where the tree returns UNKNOWN. | **83.3%** | **0.0%** | 2 | **Final** |
+| **Iteration 3** | Let the LLM answer only where the tree returns UNKNOWN. | **83.3%** | **0.0%** | 2 | **Best measured; evaluated composition, not yet wired into the app — see note** |
 
 ## Per-tier accuracy — the result that decided the architecture
 
@@ -79,6 +79,14 @@ over-triaged 4 times and hedged on a controlled haemorrhage; neither failure can
 reach the user through this gate.
 
 Critical-miss rate: **9.1% → 0.0%**.
+
+**Where this gate currently lives.** It is implemented in `eval/hybrid.py` as a
+composition of the two systems' recorded outputs. The app does not yet apply it:
+`TriageOrchestrator` calls the model on every query, and the UI shows the model's
+answer under the tree's severity. The measurement is what argues for wiring it
+in, and that is the next change rather than a completed one. Reporting it as
+shipped would be the same category of error as the bug in iteration 1 — a system
+claiming more than it can support.
 
 ## An experiment that was removed
 
