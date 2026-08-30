@@ -255,13 +255,20 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                 val aiService = AiServiceFactory.serviceForQuery(getApplication())
                 val orchestrator = TriageOrchestrator(aiService, emptyList())
                 val result = orchestrator.handleQuery(text)
-                val (_, bundle) = com.medic.app.ai.QwenModelPaths.resolve(getApplication())
-                val answerText = if (aiService is com.medic.app.ai.StubAiService &&
-                    com.medic.app.ai.QwenModelPaths.isReady(getApplication())
-                ) {
-                    "[NPU model unavailable for ${bundle.subdir} — export a matching PTE " +
-                        "(runtime/scripts/export_qwen06_sm8750.sh) or push via push_qwen_models.ps1. " +
-                        "Showing offline stub.]\n\n${result.llmAnswer}"
+                // When no on-device model is available, show the safety tree's
+                // own directive rather than the stub's placeholder text. The
+                // tree is authoritative over the model by design -- the model
+                // only elaborates -- so its directive is the correct answer
+                // here, not a fallback. Previously this branch surfaced
+                // developer text ("I don't have a real model wired in yet")
+                // and discarded a real, computed instruction.
+                val answerText = if (aiService is com.medic.app.ai.StubAiService) {
+                    buildString {
+                        append(result.triage.directive)
+                        append("\n\nOn-device model unavailable on this hardware, ")
+                        append("so this is the protocol directive without a generated ")
+                        append("explanation. Reference only — not a diagnosis.")
+                    }
                 } else {
                     result.llmAnswer
                 }
