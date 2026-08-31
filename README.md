@@ -75,7 +75,7 @@ Full evidence: **[docs/IMPROVEMENT_CHANGELOG.md](docs/IMPROVEMENT_CHANGELOG.md)*
 | **Find north without GPS** | Solar compass by day, star plate-solve by night, and a position-source state machine with a simulated spoof trigger (dead reckoning is a state label, not an implemented estimator). A persistent strip shows which position source is currently trusted. |
 | **Nearby people** | Phone-to-phone messaging with no network, including a priority SOS that carries position and trust state. Messages are held and passed on when someone new comes into range. |
 | **Translate** | Medic-to-casualty phrase screen. The on-device translation model is not implemented; the screen states this. |
-| **Nearest hospital** | Offline dataset, ranked by great-circle distance with a bearing arrow. |
+| **Nearest hospital** | Offline dataset (87 facilities: Delhi NCR, Jharkhand incl. district CHCs, major Indian metros, SF Bay Area), ranked by great-circle distance with a bearing arrow. Reports no coverage rather than pointing at a facility hundreds of kilometres away. |
 
 ## Running it
 

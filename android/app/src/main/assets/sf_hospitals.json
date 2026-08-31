@@ -1,5 +1,5 @@
 {
- "city": "San Francisco Bay Area and Jharkhand / eastern India",
+ "city": "Delhi NCR, Jharkhand, major Indian metros, and San Francisco Bay Area",
  "note": "Offline reference list only. Coverage is limited to the regions listed; outside them the app reports no coverage rather than ranking a facility thousands of kilometres away. District hospitals and city facilities use their own positions; block-level community health centres use town-centre positions accurate to the settlement, not the building. Distances are great-circle from your approximate position, not a road route.",
  "hospitals": [
   {
@@ -286,6 +286,156 @@
    "name": "Community Health Centre, Erki (Tamar)",
    "latitude": 23.01,
    "longitude": 85.6
+  },
+  {
+   "name": "AIIMS New Delhi",
+   "latitude": 28.5672,
+   "longitude": 77.21
+  },
+  {
+   "name": "Safdarjung Hospital, New Delhi",
+   "latitude": 28.568,
+   "longitude": 77.206
+  },
+  {
+   "name": "Dr. Ram Manohar Lohia Hospital, New Delhi",
+   "latitude": 28.627,
+   "longitude": 77.2
+  },
+  {
+   "name": "Lok Nayak Hospital, New Delhi",
+   "latitude": 28.641,
+   "longitude": 77.235
+  },
+  {
+   "name": "Guru Teg Bahadur Hospital, Delhi",
+   "latitude": 28.683,
+   "longitude": 77.312
+  },
+  {
+   "name": "Sir Ganga Ram Hospital, New Delhi",
+   "latitude": 28.639,
+   "longitude": 77.189
+  },
+  {
+   "name": "Indraprastha Apollo Hospital, New Delhi",
+   "latitude": 28.541,
+   "longitude": 77.283
+  },
+  {
+   "name": "Fortis Escorts Heart Institute, New Delhi",
+   "latitude": 28.562,
+   "longitude": 77.279
+  },
+  {
+   "name": "Max Super Speciality Hospital, Saket",
+   "latitude": 28.528,
+   "longitude": 77.216
+  },
+  {
+   "name": "Deen Dayal Upadhyay Hospital, Delhi",
+   "latitude": 28.654,
+   "longitude": 77.113
+  },
+  {
+   "name": "Hindu Rao Hospital, Delhi",
+   "latitude": 28.669,
+   "longitude": 77.21
+  },
+  {
+   "name": "Jaipur Golden Hospital, Rohini",
+   "latitude": 28.718,
+   "longitude": 77.114
+  },
+  {
+   "name": "Max Super Speciality Hospital, Patparganj",
+   "latitude": 28.628,
+   "longitude": 77.296
+  },
+  {
+   "name": "Medanta The Medicity, Gurugram",
+   "latitude": 28.439,
+   "longitude": 77.041
+  },
+  {
+   "name": "Fortis Memorial Research Institute, Gurugram",
+   "latitude": 28.459,
+   "longitude": 77.072
+  },
+  {
+   "name": "Kailash Hospital, Noida",
+   "latitude": 28.579,
+   "longitude": 77.326
+  },
+  {
+   "name": "Fortis Hospital, Noida",
+   "latitude": 28.575,
+   "longitude": 77.335
+  },
+  {
+   "name": "Yashoda Super Speciality Hospital, Ghaziabad",
+   "latitude": 28.669,
+   "longitude": 77.433
+  },
+  {
+   "name": "Amrita Hospital, Faridabad",
+   "latitude": 28.406,
+   "longitude": 77.317
+  },
+  {
+   "name": "KEM Hospital, Mumbai",
+   "latitude": 19.0,
+   "longitude": 72.841
+  },
+  {
+   "name": "Lilavati Hospital, Mumbai",
+   "latitude": 19.051,
+   "longitude": 72.829
+  },
+  {
+   "name": "Victoria Hospital, Bengaluru",
+   "latitude": 12.963,
+   "longitude": 77.573
+  },
+  {
+   "name": "NIMHANS, Bengaluru",
+   "latitude": 12.943,
+   "longitude": 77.596
+  },
+  {
+   "name": "Osmania General Hospital, Hyderabad",
+   "latitude": 17.372,
+   "longitude": 78.475
+  },
+  {
+   "name": "NIMS, Hyderabad",
+   "latitude": 17.427,
+   "longitude": 78.45
+  },
+  {
+   "name": "Rajiv Gandhi Government General Hospital, Chennai",
+   "latitude": 13.08,
+   "longitude": 80.278
+  },
+  {
+   "name": "Sassoon General Hospital, Pune",
+   "latitude": 18.529,
+   "longitude": 73.873
+  },
+  {
+   "name": "Civil Hospital, Ahmedabad",
+   "latitude": 23.057,
+   "longitude": 72.607
+  },
+  {
+   "name": "SMS Hospital, Jaipur",
+   "latitude": 26.904,
+   "longitude": 75.811
+  },
+  {
+   "name": "King George's Medical University, Lucknow",
+   "latitude": 26.87,
+   "longitude": 80.916
   }
  ]
 }
