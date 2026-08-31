@@ -7,3 +7,4 @@ local.properties
 .env
 .env.*
 !.env.example
+docs/VIDEO_SCRIPT.md
