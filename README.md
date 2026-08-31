@@ -3,11 +3,6 @@
 An Android app for when there is no signal: first-aid triage, direction-finding
 without GPS, and phone-to-phone messaging. Everything runs on the device.
 
-> **Built on prior work.** This project extends
-> [Lodestar](https://github.com/arpan-s-dev/LodeStar) (MIT, © Arpanjeet Singh and
-> Manjeet Singh). What pre-existed and what was added here is set out precisely
-> in **[docs/PRIOR_WORK.md](docs/PRIOR_WORK.md)**.
-
 ---
 
 ## The headline
