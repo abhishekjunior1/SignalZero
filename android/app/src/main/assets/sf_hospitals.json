@@ -1,6 +1,6 @@
 {
  "city": "San Francisco Bay Area and Jharkhand / eastern India",
- "note": "Offline reference list only. Coverage is limited to the regions listed; outside them the app reports no coverage rather than ranking a facility thousands of kilometres away. Distances are great-circle from your approximate last-known position, not a road route, and not live GPS.",
+ "note": "Offline reference list only. Coverage is limited to the regions listed; outside them the app reports no coverage rather than ranking a facility thousands of kilometres away. District hospitals and city facilities use their own positions; block-level community health centres use town-centre positions accurate to the settlement, not the building. Distances are great-circle from your approximate position, not a road route.",
  "hospitals": [
   {
    "name": "UCSF Medical Center at Parnassus",
@@ -256,6 +256,36 @@
    "name": "Banaras Hindu University Sir Sunderlal Hospital, Varanasi",
    "latitude": 25.268,
    "longitude": 82.992
+  },
+  {
+   "name": "Sadar Hospital, Khunti (district hospital)",
+   "latitude": 23.0771,
+   "longitude": 85.2789
+  },
+  {
+   "name": "Community Health Centre, Torpa",
+   "latitude": 22.92,
+   "longitude": 85.15
+  },
+  {
+   "name": "Community Health Centre, Murhu",
+   "latitude": 23.04,
+   "longitude": 85.35
+  },
+  {
+   "name": "Community Health Centre, Karra",
+   "latitude": 23.22,
+   "longitude": 85.2
+  },
+  {
+   "name": "Community Health Centre, Rania",
+   "latitude": 23.02,
+   "longitude": 85.11
+  },
+  {
+   "name": "Community Health Centre, Erki (Tamar)",
+   "latitude": 23.01,
+   "longitude": 85.6
   }
  ]
 }

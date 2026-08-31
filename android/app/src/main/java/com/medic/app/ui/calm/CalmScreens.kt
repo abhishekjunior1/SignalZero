@@ -684,6 +684,23 @@ private fun KitDetail(item: FieldKitItem) {
 // Nearby hospital
 // ----------------------------------------------------------------------------
 
+/**
+ * Distance phrasing for the hospital screen.
+ *
+ * Below ~150 m the great-circle distance is inside GPS error, so "0.0 km ·
+ * ~0 min walk" alongside a compass bearing is both meaningless and alarming
+ * on a screen someone opens when they are hurt. Say they are there instead.
+ */
+private fun hospitalDistanceLabel(distanceKm: Double): String = when {
+    distanceKm < 0.15 -> "you are here"
+    distanceKm < 1.0 -> "${(distanceKm * 1000).toInt() / 50 * 50} m away"
+    else -> "${"%.1f".format(distanceKm)} km away"
+}
+
+/** Walking time, omitted when the distance is within GPS error. */
+private fun hospitalWalkLabel(distanceKm: Double, walkMin: Int): String =
+    if (distanceKm < 0.15) "" else " · ~$walkMin min walk"
+
 @Composable
 fun HospitalScreen(
     state: AppUiState,
@@ -743,15 +760,22 @@ fun HospitalScreen(
                     .padding(14.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(GeoMath.bearingToArrow(top.bearingDegrees), color = SgHospital.icon, fontSize = 28.sp)
+                // A bearing to somewhere you are already standing is noise; the arrow
+                // would also be pointing at GPS jitter rather than a direction.
+                Text(
+                    if (top.distanceKm < 0.15) "⊙" else GeoMath.bearingToArrow(top.bearingDegrees),
+                    color = SgHospital.icon, fontSize = 28.sp
+                )
                 Spacer(Modifier.width(12.dp))
                 Column {
                     Text(
-                        "Head ${cardinalWords(GeoMath.bearingToCardinal(top.bearingDegrees))}",
+                        if (top.distanceKm < 0.15) top.hospital.name
+                        else "Head ${cardinalWords(GeoMath.bearingToCardinal(top.bearingDegrees))}",
                         color = SgHospital.title, fontSize = 17.sp, fontWeight = FontWeight.Medium
                     )
                     Text(
-                        "Closest hospital is ${"%.1f".format(top.distanceKm)} km away",
+                        if (top.distanceKm < 0.15) "You are at the closest hospital"
+                        else "Closest hospital is ${hospitalDistanceLabel(top.distanceKm)}",
                         color = SgHospital.subtitle, fontSize = 13.sp
                     )
                 }
@@ -815,7 +839,12 @@ private fun HospitalCard(entry: HospitalWithBearing, primary: Boolean, onGuide: 
         Text(entry.hospital.name, color = SgText, fontSize = 15.sp, fontWeight = FontWeight.Medium)
         Spacer(Modifier.height(6.dp))
         Text(
-            "${GeoMath.bearingToArrow(entry.bearingDegrees)} ${"%.1f".format(entry.distanceKm)} km · $cardinal · ~$walkMin min walk",
+            if (entry.distanceKm < 0.15)
+                "you are here"
+            else
+                "${GeoMath.bearingToArrow(entry.bearingDegrees)} " +
+                    "${hospitalDistanceLabel(entry.distanceKm)} · $cardinal" +
+                    hospitalWalkLabel(entry.distanceKm, walkMin),
             color = SgTextSecondary, fontSize = 13.sp
         )
         Spacer(Modifier.height(10.dp))
