@@ -5,6 +5,32 @@ without GPS, and phone-to-phone messaging. Everything runs on the device.
 
 ---
 
+## Who this is for
+
+A first responder, health worker, or ordinary bystander in a district where
+mobile coverage is thin, intermittent, or gone — after a storm, in hill and
+forest blocks, or anywhere the tower is simply too far.
+
+**The bottleneck.** Every tool that helps with an injury assumes a network. A
+search for what to do about a bleeding wound needs signal. A map to the nearest
+hospital needs signal. Calling for help needs signal. The moment those fail,
+the person holding the phone is back to memory and guesswork — and that is
+precisely the moment when the guidance matters most and when panic makes
+recall worst.
+
+**Why solving it is worth something.** The gap is not knowledge; the protocols
+are well established and fit in a few hundred kilobytes. The gap is that
+nothing carries them to the person who needs them when the network is down. A
+phone already in someone's pocket has the storage, the sensors and the radio to
+close that gap without any infrastructure at all. What it lacks is an app that
+assumes the network is already gone.
+
+That is what this is: triage that runs on the device, a way to find north when
+GPS is being jammed or is simply unavailable, an offline list of the hospitals
+that actually exist in your district, and messaging that hops phone to phone
+when there is nothing to connect to.
+
+
 ## The headline
 
 The app it started from contained this claim, in a source comment:
@@ -111,6 +137,48 @@ eval/        24-case corpus, scorer, LLM baseline, cached responses.
 scripts/     Toolchain setup, smoke test, reference implementations.
 docs/        Prior work, changelog, reproduction guide, trajectories.
 ```
+
+
+---
+
+## The main failure mode
+
+Everything this project found wrong was the same failure wearing different
+clothes: **a system answering confidently where it had no basis to answer at
+all.**
+
+- The classifier said *"Bleeding is controlled. Watch for shock, keep the
+  casualty warm"* to someone whose blood was pumping out, because nobody had
+  told it the bleeding was uncontrolled and it had no way to say "I don't know".
+- It told a choking casualty to start CPR, because "can't breathe" and "not
+  breathing" looked like the same string.
+- It offered a 105-day walk to San Francisco to a user in Jharkhand, because
+  ranking by distance always returns a nearest item, however far away.
+- The first evaluation harness I wrote reported 39 of 39 steps passing while
+  the app was not even running — it only checked for crashes, and a program
+  that has exited never crashes.
+
+None of these were caught by reading the code. All of them were caught by
+measuring it against an answer key that did not come from the code itself.
+
+## Hot take
+
+**An offline safety tool's most dangerous property is not being wrong. It is
+being confident.**
+
+A user who sees "no data for your area" goes and finds a local number. A user
+who sees "nearest hospital, 12,622 km, head north-east" follows an arrow into
+the sea. The second failure looks like a working feature, which is exactly why
+it survives review — and why the deterministic core of this app was believed to
+be correct for months without anyone running twenty-four sentences through it.
+
+So the change I'd make to how I build: **write the evaluation before the
+feature, and make "I don't know" a first-class answer.** Not as a fallback for
+when the clever path fails, but as a verdict the system is allowed to reach and
+report proudly. Every fix in the changelog is some version of teaching this app
+to admit the limits of what it actually knows — and every one of them made it
+more useful, not less.
+
 
 ## Licence
 
