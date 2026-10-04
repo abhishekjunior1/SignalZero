@@ -184,3 +184,8 @@ more useful, not less.
 
 MIT. See [LICENSE](LICENSE) — it retains the upstream copyright as that licence
 requires.
+
+## 🏆 Honors & Certifications
+* **Certificate of Participation – Frontier Engineering Challenge 2026** | *micro1* *(September 2026)*
+
+<img width="793" height="511" alt="image" src="https://github.com/user-attachments/assets/0d493880-a33a-4d0a-8625-b774f8cbb895" />
